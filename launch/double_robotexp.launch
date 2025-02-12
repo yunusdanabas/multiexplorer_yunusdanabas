@@ -1,9 +1,6 @@
 <launch>
 
-
   <!-- YunusEmreDanabas_03102023 -->
-
-
 
   <!-- Initial Robot Positions -->
   <arg name="model" default="waffle" doc="model type [burger, waffle, waffle_pi]"/>
