@@ -1,9 +1,8 @@
 <launch>
 
-
   <!-- YunusEmreDanabas_03102023 -->
-
-
+  <!-- multi_robotexp.launch -->
+  <!-- This launch file is used to run three TurtleBot3 robots in Gazebo with SLAM and map merging capabilities. -->
 
   <!-- Initial Robot Positions -->
   <arg name="model" default="waffle" doc="model type [burger, waffle, waffle_pi]"/>

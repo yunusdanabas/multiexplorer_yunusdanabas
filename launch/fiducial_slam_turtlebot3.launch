@@ -1,4 +1,8 @@
 <launch>
+  <!-- fiducial_slam_turtlebot3.launch -->
+  <!-- This launch file is used to run the fiducial slam with TurtleBot3 in Gazebo simulation. -->
+
+
   <!-- Arguments -->
   <arg name="model" default="waffle" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="x_pos" default="5.5"/>

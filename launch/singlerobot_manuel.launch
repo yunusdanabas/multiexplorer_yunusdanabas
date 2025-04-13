@@ -1,5 +1,8 @@
 <launch>
 
+  <!-- singlerobot_manuel.launch -->
+  
+
   <!-- Arguments -->
   <arg name="model" default="waffle" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="x_pos" default="5.5"/>

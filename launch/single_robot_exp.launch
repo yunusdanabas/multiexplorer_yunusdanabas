@@ -1,5 +1,8 @@
 <launch>
 
+  <!-- single_robot_exp.launch -->
+  <!-- This launch file is used to run a single robot experiment with SLAM and exploration. -->
+
   <!-- Arguments -->
   <arg name="model" default="waffle" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="x_pos" default="5.5"/>
