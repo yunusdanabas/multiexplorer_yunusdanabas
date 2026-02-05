@@ -55,5 +55,8 @@ qtcreator-*
 # Catkin custom files
 CATKIN_IGNORE
 
+# Project Explanation
+PROJECT_EXPLANATION.md
+
 # End of https://www.toptal.com/developers/gitignore/api/ros
 

@@ -1,153 +1,66 @@
 # multiexplorer_yunusdanabas
 
-**ROS package for multi-robot frontier exploration with TurtleBot3**
+ROS package for multi-robot frontier exploration with TurtleBot3. Simulation-only (Gazebo + RViz).
 
-This was my **first ROS project**, developed after a 2-week ROS boot camp and 2 additional weeks of focused project work. The implementation is intentionally basic, aimed at building a strong foundation in SLAM, navigation, and multi-robot coordination. It demonstrates and benchmarks **single-, double-, and triple-robot** autonomous exploration, SLAM, and map merging in a Gazebo house environment.
+My first ROS project, developed after a 2-week boot camp and 2 weeks of focused work at TÜBİTAK BİLGEM. Demonstrates single-, double-, and triple-robot autonomous exploration, SLAM, and map merging.
 
----
+## Overview
 
+Each robot:
 
-## 🚀 Overview
+1. Builds a local map with `gmapping`
+2. Finds frontiers (boundaries between known and unknown space)
+3. Sends navigation goals via `explore_lite` and `move_base`
+4. Contributes to a global merged map via `multirobot_map_merge`
 
-- **Frontier-based exploration** with `explore_lite`
-- **SLAM** using `gmapping` (per robot)
-- **Multi-robot map merging** via `multirobot_map_merge`
-- **Simulation-only**: no physical hardware required—perfect for ROS beginners wanting to test coordination algorithms
-
----
-
-## 🛠️  Features
-
-| Capability | Implementation |
+| Component | Implementation |
 |-----------|----------------|
-| Autonomous exploration | `explore_lite` searches frontiers, plans paths with the navigation stack |
-| Per-robot SLAM | Independent `gmapping` node per TurtleBot3 namespace |
-| Global mapping | `multirobot_map_merge` aligns and fuses local maps (`/tb3/map`) |
-| Gazebo worlds | Default: `turtlebot3_house.world` |
-| Extensible | Extra launch files for ArUco-based `fiducial_slam`, map-merge only tests, etc. |
+| Exploration | `explore_lite` (frontier detection + goal selection) |
+| Navigation | `move_base` with DWA local planner |
+| SLAM | `gmapping` (per robot) |
+| Map merging | `multirobot_map_merge` (fuses `/tb3_i/map` into `/tb3/map`) |
 
----
+## Prerequisites
 
-## 🖥️  Demo Video & Slides
+- Ubuntu 20.04 / 22.04, ROS Melodic / Noetic
+- TurtleBot3 packages, `move_base`, `explore_lite`, `multirobot_map_merge`
 
-- **Canva presentation** → <https://www.canva.com/design/DAGe6rFLM7U/w38mwYjYpvIZk73nA4x4lg/edit>
-
----
-
-## 🛠️  Prerequisites
-
-| Software | Tested Versions |
-|----------|----------------|
-| Ubuntu | 20.04 / 22.04 |
-| ROS | Melodic / Noetic |
-| TurtleBot3 packages | `turtlebot3_description`, `turtlebot3_gazebo`, `turtlebot3_slam` |
-| Navigation stack | `move_base`, `dwa_local_planner` |
-| Extra | `explore_lite`, `multirobot_map_merge` (`apt-get install ros-$ROS_DISTRO-<pkg>`) |
-
----
-
-## 📦 Installation
+## Installation
 
 ```bash
-# clone into an existing catkin workspace
 cd ~/catkin_ws/src
 git clone https://github.com/yunusdanabas/multiexplorer_yunusdanabas.git
 cd ~/catkin_ws
-
-# install OS/ROS deps
 rosdep install --from-paths src --ignore-src -r -y
-
-# build & source
-catkin_make           # or colcon build
+catkin_make
 source devel/setup.bash
-````
+```
 
----
-
-## 🎮 Quick Start
-
-Launch one of the pre-made scenarios:
+## Quick Start
 
 ```bash
-# Single robot
-roslaunch multiexplorer_yunusdanabas single_robot_exp.launch
-
-# Two robots
-roslaunch multiexplorer_yunusdanabas double_robotexp.launch
-
-# Three robots
-roslaunch multiexplorer_yunusdanabas multi_robotexp.launch
+roslaunch multiexplorer_yunusdanabas single_robot_exp.launch   # 1 robot
+roslaunch multiexplorer_yunusdanabas double_robotexp.launch    # 2 robots
+roslaunch multiexplorer_yunusdanabas multi_robotexp.launch     # 3 robots
 ```
 
-> **Tip :** pass `gui:=false` to any launch file for headless runs.
+Pass `gui:=false` for headless runs.
 
----
+## Launch Files
 
-## 🔧 Launch Files & Usage
+| File | Purpose |
+|------|---------|
+| `single_robot_exp.launch` | SLAM + exploration + navigation |
+| `double_robotexp.launch` | Two robots + map merge |
+| `multi_robotexp.launch` | Three robots + map merge |
+| `multi_map_merge.launch` | Map merge only |
+| `fiducial_slam_turtlebot3.launch` | Experimental ArUco-based SLAM |
 
-| File                              | Robots | Purpose                                 |
-| --------------------------------- | ------ | --------------------------------------- |
-| `single_robot_exp.launch`         | 1      | SLAM + `explore_lite` + navigation      |
-| `double_robotexp.launch`          | 2      | Namespaces `tb3_0`/`tb3_1`, merges maps |
-| `multi_robotexp.launch`           | 3      | Scales to 3 robots (`tb3_0…2`)          |
-| `fiducial_slam_turtlebot3.launch` | 1      | Experimental ArUco-marker SLAM          |
-| `multi_map_merge.launch`          | –      | Merge any set of `/map` topics only     |
+## Resources
 
-Each launch file spawns Gazebo, RViz (optional), navigation stack, SLAM, and exploration nodes with correct TF prefixes.
+- [GitHub](https://github.com/yunusdanabas/multiexplorer_yunusdanabas)
+- [Canva Slides](https://www.canva.com/design/DAGe6rFLM7U/w38mwYjYpvIZk73nA4x4lg/view)
 
----
+## Acknowledgements
 
-## 📂 Package Structure
-
-```
-multiexplorer_yunusdanabas/
-├── launch/               # one-click experiments
-│   ├── single_robot_exp.launch
-│   ├── double_robotexp.launch
-│   ├── multi_robotexp.launch
-│   └── ...
-├── worlds/               # Gazebo worlds (house, empty, custom)
-├── rviz/                 # RViz configs
-├── models/               # extra models, markers
-├── maps/                 # saved occupancy grids
-├── README.md
-├── CMakeLists.txt
-└── package.xml
-```
-
----
-
-## 📸 Gallery
-
-### 🧭 Single-Robot Map
-![Map](map.png)
-
-### 🗺️ Multi-Robot Merged Map
-![Merged](map_comp.png)
-
-### 🏠 Gazebo Simulation Snapshot
-![Sim](simulation.png)
-
----
-
-
-## 🤝 Acknowledgements
-
-Developed during my internship at **TÜBİTAK BİLGEM** (Robotics), supervised by the ROS training team.
-
----
-
-## 📄 License
-
-Released under the **MIT License**
-
----
-
-## ✍Author
-
-**Yunus Emre Danabaş**
-
-```
-
-Feel free to tweak section titles, add more screenshots, or include benchmark plots as the project evolves.
-```
+Developed during internship at TÜBİTAK BİLGEM (Robotics). MIT License.
